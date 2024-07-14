@@ -344,9 +344,11 @@ namespace KinematicCharacterController.Examples
                         
                         if (currentVelocity != Vector3.zero && CurrentCharacterState == CharacterState.Default) {
                             TransitionToState(CharacterState.Running);
+                            print("Running");
                         }
                         if (currentVelocity.magnitude < 0.3) {
                             TransitionToState(CharacterState.Default);
+                            print("Stopping");
                         }
                     }
                     // Handle jumping

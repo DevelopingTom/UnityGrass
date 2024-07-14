@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GrassMaterial
+  m_Name: Fern_branch
   m_Shader: {fileID: -6465566751694194690, guid: 26f67980bc83b66488d663d6ad9d7d9d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -25,7 +25,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 2038a37a87e1eff4fa5efd69c9d1312e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4ccab22710bac2144a62d3eb417697f3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -49,11 +49,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 2038a37a87e1eff4fa5efd69c9d1312e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4ccab22710bac2144a62d3eb417697f3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainText:
+        m_Texture: {fileID: 2800000, guid: 4ccab22710bac2144a62d3eb417697f3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 3713ca604b000054bbbd6c2014aaca94, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4ccab22710bac2144a62d3eb417697f3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -92,7 +96,6 @@ Material:
     m_Floats:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 1
-    - _AlphaThreshold: 0.5
     - _AlphaToMask: 1
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
@@ -109,7 +112,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HeightBlend: 0.77
+    - _HeightBlend: 0.84
     - _MergeTerrain: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
@@ -124,23 +127,23 @@ Material:
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _TerrainDImension: 1000
-    - _UseBottomColor: 0
-    - _WindIntensity: 0.25
+    - _UseBottomColor: 1
+    - _WindIntensity: 0.29
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.114498034, g: 0.7830189, b: 0.120183244, a: 1}
-    - _BottomColor: {r: 0.12549019, g: 0.53609526, b: 0.58431375, a: 0}
-    - _Color: {r: 0.11449798, g: 0.7830188, b: 0.12018319, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BottomColor: {r: 0, g: 0.7530303, b: 1, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FarColor: {r: 0.7519283, g: 1, b: 0, a: 0}
-    - _NearColor: {r: 0.10849059, g: 1, b: 0.15737467, a: 1}
+    - _FarColor: {r: 0.9439336, g: 1, b: 0.15686274, a: 0}
+    - _NearColor: {r: 0.9333334, g: 1, b: 0, a: 0}
     - _Range: {r: 3, g: 17, b: 0, a: 0}
-    - _ShadowColor: {r: 0.16509432, g: 0.69331485, b: 1, a: 0}
+    - _ShadowColor: {r: 0, g: 0.6476085, b: 1, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &7210862759891430551
+--- !u!114 &2915001629090210147
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
