@@ -10278,6 +10278,37 @@ Transform:
   - {fileID: 7986525419164631056}
   m_Father: {fileID: 8116382646064506468}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5896193774866680671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6245316505459313147}
+  m_Layer: 0
+  m_Name: Seat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6245316505459313147
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5896193774866680671}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.105, y: -0.0805, z: -0.56}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8116382646064506468}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6253698851772744515
 GameObject:
   m_ObjectHideFlags: 0
@@ -15123,6 +15154,7 @@ GameObject:
   - component: {fileID: 5001432497707225859}
   - component: {fileID: 5250611170245592755}
   - component: {fileID: 6378671147825492101}
+  - component: {fileID: 963149271565681815}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -15148,6 +15180,7 @@ Transform:
   - {fileID: 1005485731128667638}
   - {fileID: 2566850813284393055}
   - {fileID: 2482391951234619802}
+  - {fileID: 6245316505459313147}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5001432497707225859
@@ -15290,7 +15323,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!153 &6378671147825492101
@@ -15395,6 +15428,22 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &963149271565681815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471785344401860789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60fe8657a13bd7c4e880ea08401d36ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  seatPosition: {fileID: 6245316505459313147}
+  seatingOffset: {x: 0, y: 0, z: 0}
+  transitionSpeed: 0
 --- !u!1 &6690997319064040572
 GameObject:
   m_ObjectHideFlags: 0

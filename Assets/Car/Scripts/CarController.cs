@@ -24,7 +24,7 @@ public class CarController : WheelVehicleBehaviour
     private ConfigurableJoint joint;
     private Vector3 jointAnchor;
     private float jointLinearLimit = 0.24f;
-  
+
     private void Update()
     {
         GetPlayerInput();

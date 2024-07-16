@@ -10,7 +10,8 @@ namespace KinematicCharacterController.Examples
     {
         Default,
         Jumping,
-        Running
+        Running,
+        Sitting
     }
 
     public enum OrientationMethod
@@ -136,6 +137,13 @@ namespace KinematicCharacterController.Examples
                         animator.SetBool("Running", true);
                         break;
                     }
+                case CharacterState.Sitting:
+                    {
+                        Motor.SetMovementCollisionsSolvingActivation(false);
+                        Motor.SetGroundSolvingActivation(false);
+                        animator.SetBool("Sitting", true);
+                        break;
+                    }
             }
         }
 
@@ -158,6 +166,13 @@ namespace KinematicCharacterController.Examples
                 case CharacterState.Running:
                     {
                         animator.SetBool("Running", false);
+                        break;
+                    }
+                case CharacterState.Sitting:
+                    {
+                        Motor.SetMovementCollisionsSolvingActivation(true);
+                        Motor.SetGroundSolvingActivation(true);
+                        animator.SetBool("Sitting", false);
                         break;
                     }
             }
@@ -312,19 +327,18 @@ namespace KinematicCharacterController.Examples
         /// </summary>
         public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
         {
-            _timeSinceJumpRequested += deltaTime;
-
-            // Take into account additive velocity
-            if (_internalVelocityAdd.sqrMagnitude > 0f)
-            {
-                currentVelocity += _internalVelocityAdd;
-                _internalVelocityAdd = Vector3.zero;
-            }
-
             switch (CurrentCharacterState)
             {
                 case CharacterState.Default:
                 case CharacterState.Running:
+                case CharacterState.Jumping:
+                    // Take into account additive velocity
+                    if (_internalVelocityAdd.sqrMagnitude > 0f)
+                    {
+                        currentVelocity += _internalVelocityAdd;
+                        _internalVelocityAdd = Vector3.zero;
+                    }
+
                     if (Motor.GroundingStatus.IsStableOnGround)
                     {
                         float currentVelocityMagnitude = currentVelocity.magnitude;
@@ -344,14 +358,56 @@ namespace KinematicCharacterController.Examples
                         
                         if (currentVelocity != Vector3.zero && CurrentCharacterState == CharacterState.Default) {
                             TransitionToState(CharacterState.Running);
-                            print("Running");
                         }
                         if (currentVelocity.magnitude < 0.3) {
                             TransitionToState(CharacterState.Default);
-                            print("Stopping");
                         }
+                    } else {
+                        // Handle air movement
+                        // Add move input
+                        if (_moveInputVector.sqrMagnitude > 0f)
+                        {
+                            Vector3 addedVelocity = _moveInputVector * AirAccelerationSpeed * deltaTime;
+
+                            Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, Motor.CharacterUp);
+
+                            // Limit air velocity from inputs
+                            if (currentVelocityOnInputsPlane.magnitude < MaxAirMoveSpeed)
+                            {
+                                // clamp addedVel to make total vel not exceed max vel on inputs plane
+                                Vector3 newTotal = Vector3.ClampMagnitude(currentVelocityOnInputsPlane + addedVelocity, MaxAirMoveSpeed);
+                                addedVelocity = newTotal - currentVelocityOnInputsPlane;
+                            }
+                            else
+                            {
+                                // Make sure added vel doesn't go in the direction of the already-exceeding velocity
+                                if (Vector3.Dot(currentVelocityOnInputsPlane, addedVelocity) > 0f)
+                                {
+                                    addedVelocity = Vector3.ProjectOnPlane(addedVelocity, currentVelocityOnInputsPlane.normalized);
+                                }
+                            }
+
+                            // Prevent air-climbing sloped walls
+                            if (Motor.GroundingStatus.FoundAnyGround)
+                            {
+                                if (Vector3.Dot(currentVelocity + addedVelocity, addedVelocity) > 0f)
+                                {
+                                    Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(Motor.CharacterUp, Motor.GroundingStatus.GroundNormal), Motor.CharacterUp).normalized;
+                                    addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
+                                }
+                            }
+                            // Apply added velocity
+                            currentVelocity += addedVelocity;
+                        }
+
+                        // Gravity
+                        currentVelocity += Gravity * deltaTime;
+
+                        // Drag
+                        currentVelocity *= (1f / (1f + (Drag * deltaTime)));
                     }
                     // Handle jumping
+                    _timeSinceJumpRequested += deltaTime;
                     _jumpedThisFrame = false;
                     if (_jumpRequested)
                     {
@@ -379,53 +435,6 @@ namespace KinematicCharacterController.Examples
                         }
                     }                        
                     break;
-            }
-
-            // Handle air movement
-            if (!Motor.GroundingStatus.IsStableOnGround)
-            {
-                // Add move input
-                if (_moveInputVector.sqrMagnitude > 0f)
-                {
-                    Vector3 addedVelocity = _moveInputVector * AirAccelerationSpeed * deltaTime;
-
-                    Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, Motor.CharacterUp);
-
-                    // Limit air velocity from inputs
-                    if (currentVelocityOnInputsPlane.magnitude < MaxAirMoveSpeed)
-                    {
-                        // clamp addedVel to make total vel not exceed max vel on inputs plane
-                        Vector3 newTotal = Vector3.ClampMagnitude(currentVelocityOnInputsPlane + addedVelocity, MaxAirMoveSpeed);
-                        addedVelocity = newTotal - currentVelocityOnInputsPlane;
-                    }
-                    else
-                    {
-                        // Make sure added vel doesn't go in the direction of the already-exceeding velocity
-                        if (Vector3.Dot(currentVelocityOnInputsPlane, addedVelocity) > 0f)
-                        {
-                            addedVelocity = Vector3.ProjectOnPlane(addedVelocity, currentVelocityOnInputsPlane.normalized);
-                        }
-                    }
-
-                    // Prevent air-climbing sloped walls
-                    if (Motor.GroundingStatus.FoundAnyGround)
-                    {
-                        if (Vector3.Dot(currentVelocity + addedVelocity, addedVelocity) > 0f)
-                        {
-                            Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(Motor.CharacterUp, Motor.GroundingStatus.GroundNormal), Motor.CharacterUp).normalized;
-                            addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
-                        }
-                    }
-
-                    // Apply added velocity
-                    currentVelocity += addedVelocity;
-                }
-
-                // Gravity
-                currentVelocity += Gravity * deltaTime;
-
-                // Drag
-                currentVelocity *= (1f / (1f + (Drag * deltaTime)));
             }
 
         }
@@ -548,7 +557,6 @@ namespace KinematicCharacterController.Examples
 
         protected void OnLanded()
         {
-            print("Landed");
             TransitionToState(CharacterState.Default);
         }
 
