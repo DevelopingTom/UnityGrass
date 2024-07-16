@@ -21,20 +21,14 @@ public class CarController : WheelVehicleBehaviour
     [Header("Input")]
     private float moveInput = 0;
     private float steerInput = 0;
-    private ConfigurableJoint joint;
-    private Vector3 jointAnchor;
-    private float jointLinearLimit = 0.24f;
-  
     private void Update()
     {
         GetPlayerInput();
+       
     }
 
     override public void Start() {
         base.Start();
-        joint = GetComponent<ConfigurableJoint>();
-        jointAnchor = joint.anchor;
-        jointLinearLimit = joint.linearLimit.limit;
     }
 
     private void LightToggle()
@@ -52,14 +46,6 @@ public class CarController : WheelVehicleBehaviour
             emissionSourceMaterial.EnableKeyword("_EMISSION");
         }
     }
-
-    private void DropTrailer()
-    {
-        if (joint)
-        {
-            Destroy(joint);
-        }
-    }
     
     #region Input Handling
         private void GetPlayerInput()
@@ -73,10 +59,6 @@ public class CarController : WheelVehicleBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Jump();
-            }
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                DropTrailer();
             }
         }
     #endregion
