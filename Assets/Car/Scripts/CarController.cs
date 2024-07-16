@@ -24,7 +24,13 @@ public class CarController : WheelVehicleBehaviour
 
     private void Update()
     {
-        GetPlayerInput();
+        
+        Enterable enterable = GetComponent<Enterable>();
+
+        if (enterable != null && enterable.isEntered())
+        {
+            GetPlayerInput();
+        }
     }
 
     override public void Start() {

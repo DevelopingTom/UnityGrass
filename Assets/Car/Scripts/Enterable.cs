@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using KinematicCharacterController.Examples;
+using System;
 
 public class Enterable : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Enterable : MonoBehaviour
   
     private Transform player;
     private Transform mesh;
+    private Boolean isIn = false;
     
     public float enterDuration = 1.0f; // Duration for entering the vehicle
   
@@ -22,15 +24,18 @@ public class Enterable : MonoBehaviour
     {
         
     }
+    public Boolean isEntered() {
+        return isIn;
+    }
     
     IEnumerator Enter(Transform newDriver)
     {
+        isIn = true;
         player = newDriver;
         player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Sitting);
         mesh = player.Find("Root");
         if (mesh != null) {
-            Vector3 startPos = mesh.position;
-            Quaternion startRot = mesh.rotation;
+            mesh.GetPositionAndRotation(out Vector3 startPos, out Quaternion startRot);
             Vector3 endPos = seatPosition.position;
             Quaternion endRot = seatPosition.rotation;
 
