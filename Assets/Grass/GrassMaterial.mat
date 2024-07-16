@@ -109,8 +109,8 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HeightBlend: 0.54
-    - _MergeTerrain: 0
+    - _HeightBlend: 0.44
+    - _MergeTerrain: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -133,8 +133,8 @@ Material:
     - _BottomColor: {r: 0.12549019, g: 0.58431375, b: 0.22701171, a: 0}
     - _Color: {r: 0.11449798, g: 0.7830188, b: 0.12018319, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FarColor: {r: 1, g: 0.97662324, b: 0, a: 0}
-    - _NearColor: {r: 0.69531566, g: 0.9528302, b: 0.31011927, a: 1}
+    - _FarColor: {r: 1, g: 0.9738776, b: 0.06132078, a: 0}
+    - _NearColor: {r: 0.2971698, g: 1, b: 0.33751845, a: 1}
     - _Range: {r: 3, g: 17, b: 0, a: 0}
     - _ShadowColor: {r: 0, g: 0.6886792, b: 0.051376443, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
