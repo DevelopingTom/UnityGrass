@@ -108,7 +108,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HeightBlend: 1.37
+    - _HeightBlend: 1.68
     - _MergeTerrain: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
@@ -129,11 +129,11 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BottomColor: {r: 1, g: 0.9614237, b: 0, a: 0}
+    - _BottomColor: {r: 1, g: 0.93442965, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FarColor: {r: 1, g: 0.63569504, b: 0, a: 0}
-    - _NearColor: {r: 0.9811321, g: 0.97133166, b: 0.35635456, a: 0}
+    - _FarColor: {r: 1, g: 0.54897803, b: 0, a: 0}
+    - _NearColor: {r: 0.99145186, g: 1, b: 0, a: 0}
     - _Range: {r: 10, g: 25, b: 0, a: 0}
     - _ShadowColor: {r: 0.86535, g: 1, b: 0.11792451, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
