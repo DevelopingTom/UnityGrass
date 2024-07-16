@@ -1,14 +1,16 @@
 using UnityEngine;
+using System.Collections;
 using KinematicCharacterController.Examples;
 
 public class Enterable : MonoBehaviour
 {
-    public Transform player;
     public Transform seatPosition;
     public Vector3 seatingOffset;
-    public float transitionSpeed;
   
+    private Transform player;
     private Transform mesh;
+    
+    public float enterDuration = 1.0f; // Duration for entering the vehicle
   
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,14 +23,31 @@ public class Enterable : MonoBehaviour
         
     }
     
-    public void Enter(Transform newDriver)
+    IEnumerator Enter(Transform newDriver)
     {
         player = newDriver;
         player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Sitting);
-        mesh = player.Find("Root"); 
-        mesh.position = Vector3.Lerp(player.position, seatPosition.position + seatingOffset, transitionSpeed);
-        mesh.rotation = Quaternion.Slerp(player.rotation, seatPosition.rotation, transitionSpeed);
-        mesh.parent = seatPosition;
+        mesh = player.Find("Root");
+        if (mesh != null) {
+            Vector3 startPos = mesh.position;
+            Quaternion startRot = mesh.rotation;
+            Vector3 endPos = seatPosition.position;
+            Quaternion endRot = seatPosition.rotation;
+
+            float elapsedTime = 0;
+
+            while (elapsedTime < enterDuration)
+            {
+                mesh.position = Vector3.Lerp(startPos, endPos, elapsedTime / enterDuration);
+                mesh.rotation = Quaternion.Slerp(startRot, endRot, elapsedTime / enterDuration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            mesh.position = endPos;
+            mesh.rotation = endRot;
+            mesh.parent = seatPosition;
+        }
     }
     
     void OnTriggerEnter(Collider other)
@@ -44,7 +63,7 @@ public class Enterable : MonoBehaviour
     {
         if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && player == null)
         {
-            Enter(other.transform);
+            StartCoroutine(Enter(other.transform));
         }
     }
 
