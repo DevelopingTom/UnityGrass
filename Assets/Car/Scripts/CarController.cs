@@ -27,7 +27,7 @@ public class CarController : WheelVehicleBehaviour
         
         Enterable enterable = GetComponent<Enterable>();
 
-        if (enterable != null && enterable.isEntered())
+        if (enterable != null && enterable.Entered)
         {
             GetPlayerInput();
         }

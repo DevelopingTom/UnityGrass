@@ -15181,6 +15181,7 @@ Transform:
   - {fileID: 2566850813284393055}
   - {fileID: 2482391951234619802}
   - {fileID: 6245316505459313147}
+  - {fileID: 7059459501440778813}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5001432497707225859
@@ -15440,10 +15441,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60fe8657a13bd7c4e880ea08401d36ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   seatPosition: {fileID: 6245316505459313147}
   seatingOffset: {x: 0, y: 0, z: 0}
-  transitionSpeed: 0
+  enterDuration: 1
 --- !u!1 &6690997319064040572
 GameObject:
   m_ObjectHideFlags: 0
@@ -20373,6 +20373,37 @@ Transform:
   - {fileID: 3461355657558162390}
   - {fileID: 7507495879381876015}
   m_Father: {fileID: 1636314891795375246}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8141619263972729058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7059459501440778813}
+  m_Layer: 0
+  m_Name: ExitPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7059459501440778813
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8141619263972729058}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.83, y: 0, z: -0.221}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8116382646064506468}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8191129693274387812
 GameObject:
