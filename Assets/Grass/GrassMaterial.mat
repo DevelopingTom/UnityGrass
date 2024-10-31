@@ -109,7 +109,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HeightBlend: 1.07
+    - _HeightBlend: 0.19
     - _MergeTerrain: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
@@ -124,9 +124,9 @@ Material:
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _TerrainDImension: 1000
-    - _TipBlend: 0.34
+    - _TipBlend: 0.17
     - _UseBottomColor: 0
-    - _WindIntensity: 0.25
+    - _WindIntensity: 0.07
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
@@ -139,7 +139,7 @@ Material:
     - _Range: {r: 3, g: 17, b: 0, a: 0}
     - _ShadowColor: {r: 0, g: 0.58388186, b: 1, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _TipColor: {r: 0.6771937, g: 0.8679245, b: 0, a: 0}
+    - _TipColor: {r: 0.78280544, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &7210862759891430551

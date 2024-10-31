@@ -53,7 +53,7 @@ public class JunctionBuilderOverlay : Overlay
 
         ShowIntersection(intersection);
 
-        Selection.activeTransform.GetComponent<SplineRoad>().AddJunction(intersection);
+        Selection.activeTransform.GetComponent<SplineRectangleExtruder>().AddJunction(intersection);
     }
 
     void OnSelectionChanged()
@@ -65,7 +65,7 @@ public class JunctionBuilderOverlay : Overlay
     {
         ClearSelectionInfo();
         List<SelectedSplineElementInfo> infos = SplineToolUtility.GetSelection();
-        List<Intersection> intersections = Selection.activeTransform.GetComponent<SplineRoad>().GetJunctions();
+        List<Intersection> intersections = Selection.activeTransform.GetComponent<SplineRectangleExtruder>().GetJunctions();
         foreach (SelectedSplineElementInfo item in infos)
         {
             SelectionInfoLabel.text += $"Spline {item.targetIndex}, Knots {item.knotIndex} \n";
@@ -81,7 +81,7 @@ public class JunctionBuilderOverlay : Overlay
 
     public void OnChangeValueEvent()
     {
-        Selection.activeTransform.GetComponent<SplineRoad>().BuildMesh();
+        Selection.activeTransform.GetComponent<SplineRectangleExtruder>().BuildMesh();
     }
 
     public void ShowIntersection(Intersection intersection)

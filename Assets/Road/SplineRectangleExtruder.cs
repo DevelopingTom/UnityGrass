@@ -3,7 +3,10 @@ using UnityEngine.Splines;
 using System.Collections.Generic;
 
 [ExecuteInEditMode]
-public class SplineRoad : MonoBehaviour
+[RequireComponent(typeof(SplineSampler))]
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshRenderer))]
+public class SplineRectangleExtruder : MonoBehaviour
 {
     List<Vector3> m_vertsP1;
     List<Vector3> m_vertsP1Top;
@@ -11,24 +14,26 @@ public class SplineRoad : MonoBehaviour
     List<Vector3> m_vertsP2Top;
     
     [SerializeField]
-    private int m_width;
+    private float m_width = 1;
     [SerializeField]
-    private float m_height;
+    private float m_height = 1;
     [SerializeField]
-    private List<Intersection> m_intersections;
+    private List<Intersection> m_intersections = new List<Intersection>();
 
     [SerializeField]
-    private int resolution;
+    private int resolution = 10;
 
-    [SerializeField]
-    private SplineSampler m_splineSampler;
-    [SerializeField]
-    private MeshFilter m_meshFilter;
     [SerializeField]
     private float m_curveStep = 0.2f;
 
-    void Start()
-    {
+    public float Width {
+        get { return m_width; }
+        set { m_width = value; }
+    }
+
+    public float Height {
+        get { return m_height; }
+        set { m_height = value; }
     }
 
     private void Awake()
@@ -71,14 +76,15 @@ public class SplineRoad : MonoBehaviour
         float step = 1f / (float)resolution;
         Vector3 p1;
         Vector3 p2;
-        for (int j = 0; j < m_splineSampler.NumSplines; j++) {
+        SplineSampler splineSampler = GetComponent<SplineSampler>();
+        for (int j = 0; j < splineSampler.NumSplines; j++) {
             for (int i = 0; i < resolution; i++) {
                 float t = step * i;
-                m_splineSampler.SampleSplineWidth(j, t, out p1, out p2, m_width);
+                splineSampler.SampleSplineWidth(j, t, out p1, out p2, m_width);
                 m_vertsP1.Add(p1);
                 m_vertsP2.Add(p2);
             }
-            m_splineSampler.SampleSplineWidth(j, 1f, out p1, out p2, m_width);
+            splineSampler.SampleSplineWidth(j, 1f, out p1, out p2, m_width);
             m_vertsP1.Add(p1);
             m_vertsP2.Add(p2);
         }
@@ -86,6 +92,7 @@ public class SplineRoad : MonoBehaviour
 
     private void BuildIntersectionVerts(List<Vector3> verts, List<int> tris, List<Vector2> uvs)
     {       
+        SplineSampler splineSampler = GetComponent<SplineSampler>();
         if (m_curveStep == 0f)
         {
             m_curveStep = 0.1f;
@@ -99,7 +106,7 @@ public class SplineRoad : MonoBehaviour
             {
                 int splineIndex = junction.splineIndex;
                 float t = junction.knotIndex == 0 ? 0f : 1f;
-                m_splineSampler.SampleSplineWidth(splineIndex, t, out Vector3 p1, out Vector3 p2, m_width);
+                splineSampler.SampleSplineWidth(splineIndex, t, out Vector3 p1, out Vector3 p2, m_width);
                 if (junction.knotIndex == 0)
                 {
                     junctionEdges.Add(new JunctionEdge(p1, p2));
@@ -224,7 +231,8 @@ public class SplineRoad : MonoBehaviour
         List<Vector2> uvs = new List<Vector2>();
         int offset = 0;
 
-        for (int currentSplineIndex = 0; currentSplineIndex < m_splineSampler.NumSplines; currentSplineIndex++) {
+        SplineSampler splineSampler = GetComponent<SplineSampler>();
+        for (int currentSplineIndex = 0; currentSplineIndex < splineSampler.NumSplines; currentSplineIndex++) {
             int splineOffset = resolution * currentSplineIndex;
             splineOffset += currentSplineIndex;
             float uvOffset = 0;
@@ -325,6 +333,6 @@ public class SplineRoad : MonoBehaviour
         m.SetUVs(0, uvs);
         // m.Optimize();
 		// m.RecalculateNormals();
-        m_meshFilter.mesh = m;
+        GetComponent<MeshFilter>().mesh = m;
     }
 }
