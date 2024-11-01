@@ -31,4 +31,13 @@ public class SplineSampler : MonoBehaviour
         p1 = position + (right * width);
         p2 = position + (-right * width);
     }
+
+    public Vector3 NearestPointFrom(int splineIndex, Vector3 point)
+    {
+        var spline = GetComponent<SplineContainer>()[splineIndex];
+        float3 nearest;
+        float t;
+        SplineUtility.GetNearestPoint(spline, (float3)point, out nearest, out t);
+        return nearest;
+    }
 }
