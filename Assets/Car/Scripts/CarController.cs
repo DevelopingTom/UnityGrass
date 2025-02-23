@@ -62,10 +62,6 @@ public class CarController : WheelVehicleBehaviour
             {
                 LightToggle();
             }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Jump();
-            }
         }
     #endregion
     
@@ -97,7 +93,7 @@ public class CarController : WheelVehicleBehaviour
         {
             float carSpeed = Vector3.Dot(transform.forward, carRBody.linearVelocity);
             float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / maxSpeed);
-            float availableTorque = powerCurve.Evaluate(normalizedSpeed) * moveInput * 7000;
+            float availableTorque = powerCurve.Evaluate(normalizedSpeed) * moveInput * carRBody.mass * 5;
             
             if (carSpeed - maxSpeed < 0.1f) 
             {

@@ -2,17 +2,18 @@ using UnityEngine;
 using System.Collections;
 using KinematicCharacterController.Examples;
 using System;
+using KinematicCharacterController;
 
 public class Enterable : MonoBehaviour
 {
     public Transform exitPosition;
     public Transform seatPosition;
     public Vector3 seatingOffset;
-  
+
     private GameObject player;
     private Transform mesh;
     public float enterDuration = 1.0f; // Duration for entering the vehicle
-  
+    private bool isPlayerInTrigger = false;
     private Boolean _isIn = false;
     public Boolean Entered
     {
@@ -25,7 +26,13 @@ public class Enterable : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F)) {
+        if (isPlayerInTrigger && Input.GetKeyDown(KeyCode.E) && player == null)
+        {
+            StartCoroutine(Enter(GameObject.FindWithTag("Player")));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && player != null)
+        {
             Exit();
         }
     }
@@ -60,19 +67,25 @@ public class Enterable : MonoBehaviour
 
     void Exit()
     {
-        player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Default);
-        player.SetActive(true);
-        player.transform.position = exitPosition.position;
-        mesh.parent = player.transform;
-        mesh.localPosition = new Vector3(0, 0, 0);
-        mesh.localRotation = Quaternion.identity;
-        Entered = false;
+        if (player != null)
+        {
+            player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Jumping);
+            player.SetActive(true);
+            var characterMotor = player.GetComponentInChildren<KinematicCharacterMotor>();
+            characterMotor.SetPosition(seatPosition.position + Vector3.up / 2);
+            characterMotor.SetRotation(seatPosition.rotation);
+            mesh.position = player.transform.position;
+            mesh.parent = player.transform;
+            player = null;
+            Entered = false;
+        }
     }
     
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            isPlayerInTrigger = true;
             // Display UI or message to indicate that player can enter the vehicle
             Debug.Log("Press 'E' to enter the vehicle");
         }

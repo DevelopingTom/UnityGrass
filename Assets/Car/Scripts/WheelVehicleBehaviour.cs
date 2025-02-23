@@ -101,9 +101,9 @@ public abstract class WheelVehicleBehaviour : MonoBehaviour
     private void HandleDust(ParticleSystem dustParticleSystem, Vector3 dragForce)
     {
         var emissionL = dustParticleSystem.emission;
-        if (dragForce.magnitude > 25000f && carRBody.linearVelocity.magnitude > 0.1f) // Emit dust when the car is moving
+        if (dragForce.magnitude > 10000f && carRBody.linearVelocity.magnitude > 0.1f) // Emit dust when the car is moving
         {
-            emissionL.rateOverTime = (dragForce.magnitude - 25000f) / 200; // Adjust this value as needed
+            emissionL.rateOverTime = Mathf.Min((dragForce.magnitude - 4500f) / 100, 100); // Adjust this value as needed
         }
         else
         {
