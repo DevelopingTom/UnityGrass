@@ -55,9 +55,10 @@ public class Engine : MonoBehaviour
 
     private void Throttle(float power)
     {
-        if (rb.linearVelocity.magnitude < maxSpeed)
+        float currentSpeed = rb.linearVelocity.magnitude;
+        Vector3 dir = power * transform.forward;
+        if (currentSpeed < maxSpeed || (currentSpeed >= maxSpeed && Vector3.Dot(rb.linearVelocity, dir) < 0))
         {
-            Vector3 dir = power * transform.forward;
             rb.AddForce(dir);
         }
     }
