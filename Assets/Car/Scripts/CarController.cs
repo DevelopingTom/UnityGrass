@@ -21,6 +21,7 @@ public class CarController : WheelVehicleBehaviour
     [Header("Input")]
     private float moveInput = 0;
     private float steerInput = 0;
+    private bool isEntered = false; 
 
     private void Update()
     {
@@ -30,6 +31,11 @@ public class CarController : WheelVehicleBehaviour
         if (enterable != null && enterable.Entered)
         {
             GetPlayerInput();
+            isEntered = true;
+        }
+        else
+        {
+            isEntered = false;
         }
     }
 
@@ -77,14 +83,17 @@ public class CarController : WheelVehicleBehaviour
         
         override protected void Movement() 
         {
-            if (wheelsAreGrounded[2] + wheelsAreGrounded[3] > 0) 
+            if (isEntered) // Check if the car is entered
             {
-                for (int i = 0; i < rayPoints.Length; i++)
+                if (wheelsAreGrounded[2] + wheelsAreGrounded[3] > 0) 
                 {
-                    Acceleration(rayPoints[i]);
-                    InverseDrag(rayPoints[i].forward, rayPoints[i], 1f);
-                }            
-            } 
+                    for (int i = 0; i < rayPoints.Length; i++)
+                    {
+                        Acceleration(rayPoints[i]);
+                        InverseDrag(rayPoints[i].forward, rayPoints[i], 1f);
+                    }            
+                } 
+            }
             base.Movement();
             Turn();
 
