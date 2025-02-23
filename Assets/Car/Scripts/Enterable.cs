@@ -6,7 +6,6 @@ using KinematicCharacterController;
 
 public class Enterable : MonoBehaviour
 {
-    public Transform exitPosition;
     public Transform seatPosition;
     public Vector3 seatingOffset;
 
@@ -103,6 +102,7 @@ public class Enterable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            isPlayerInTrigger = false;
             // Hide UI or message
             Debug.Log("You left the vehicle area");
         }
