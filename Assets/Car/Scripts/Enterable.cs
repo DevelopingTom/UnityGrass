@@ -68,13 +68,13 @@ public class Enterable : MonoBehaviour
     {
         if (player != null)
         {
-            player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Jumping);
             player.SetActive(true);
             var characterMotor = player.GetComponentInChildren<KinematicCharacterMotor>();
             characterMotor.SetPosition(seatPosition.position + Vector3.up / 2);
             characterMotor.SetRotation(seatPosition.rotation);
             mesh.position = player.transform.position;
             mesh.parent = player.transform;
+            player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Jumping);
             player = null;
             Entered = false;
         }
