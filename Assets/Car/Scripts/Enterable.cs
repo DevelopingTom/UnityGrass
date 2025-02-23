@@ -38,6 +38,7 @@ public class Enterable : MonoBehaviour
 
     IEnumerator Enter(GameObject newDriver)
     {
+            Debug.Log(isPlayerInTrigger);
         Entered = true;
         player = newDriver;
         player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Sitting);
@@ -94,7 +95,7 @@ public class Enterable : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && player == null)
+        if (isPlayerInTrigger && other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && player == null)
         {
             StartCoroutine(Enter(other.gameObject));
         }
