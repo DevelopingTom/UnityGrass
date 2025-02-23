@@ -72,6 +72,8 @@ public class Enterable : MonoBehaviour
             var characterMotor = player.GetComponentInChildren<KinematicCharacterMotor>();
             characterMotor.SetPosition(seatPosition.position + Vector3.up / 2);
             characterMotor.SetRotation(seatPosition.rotation);
+            mesh.localPosition = Vector3.zero;
+            mesh.localRotation = Quaternion.identity;
             mesh.position = player.transform.position;
             mesh.parent = player.transform;
             player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Jumping);
