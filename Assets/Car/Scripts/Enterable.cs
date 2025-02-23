@@ -38,7 +38,6 @@ public class Enterable : MonoBehaviour
 
     IEnumerator Enter(GameObject newDriver)
     {
-            Debug.Log(isPlayerInTrigger);
         Entered = true;
         player = newDriver;
         player.GetComponentInChildren<KinematicCharacterController.Examples.ExampleCharacterController>().TransitionToState(CharacterState.Sitting);
