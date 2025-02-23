@@ -9,31 +9,56 @@ public class Engine : MonoBehaviour
     private Rigidbody rb;
 
     [SerializeField] private float power;
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float initSpeed = 0;
+    [SerializeField] private float dragForce = 0.1f; // A
+
+
+    [Header("Input")]
+    private float moveInput = 0;
 
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Vector3 dir = 6500 * transform.forward;
+        Vector3 dir = initSpeed * transform.forward;
         rb.AddForce(dir);
     }
 
+    private void Update()
+    {
+        
+        Enterable enterable = GetComponent<Enterable>();
+
+        if (enterable != null && enterable.Entered)
+        {
+            GetPlayerInput();
+        }
+    }
+    
+    #region Input Handling
+        private void GetPlayerInput()
+        {
+            moveInput = Input.GetAxis("Vertical");
+        }
+    #endregion
+
     private void FixedUpdate()
     {
-        // if (Input.GetKey(KeyCode.W))
-        // {
-        //     Throttle(power);
-        // }
+        Throttle(moveInput * power);
         
-        // if (Input.GetKey(KeyCode.S))
-        // {
-        //     Throttle(-power);
-        // }
+        if (moveInput == 0)
+        {
+            rb.linearVelocity *= 1 - dragForce * Time.fixedDeltaTime;
+        }
     }
 
     private void Throttle(float power)
     {
-        Vector3 dir = power * transform.forward;
-        rb.AddForce(dir);
+        if (rb.linearVelocity.magnitude < maxSpeed)
+        {
+            Vector3 dir = power * transform.forward;
+            rb.AddForce(dir);
+        }
     }
 }
