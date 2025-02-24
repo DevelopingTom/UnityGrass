@@ -87,7 +87,7 @@ public class CarController : WheelVehicleBehaviour
             {
                 for (int i = 0; i < rayPoints.Length; i++)
                 {
-                    if (isEntered) // Check if the car is entered
+                    if (isEntered)
                     {
                         Acceleration(rayPoints[i]);
                     }            
