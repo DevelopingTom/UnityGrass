@@ -36,6 +36,7 @@ public class Holder : MonoBehaviour
         {
             Rigidbody itemRigidbody = itemHolded.GetComponent<Rigidbody>();
             itemRigidbody.isKinematic = false;
+            itemRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             Vector3 slantedForce = (transform.forward * 1.3f + transform.up).normalized * throwForce; // Modify this line to slant the force
             itemRigidbody.AddForce(slantedForce, ForceMode.VelocityChange);
         }
@@ -47,9 +48,11 @@ public class Holder : MonoBehaviour
     {
         itemHolded = item;
         itemsNear.Remove(item.GetComponent<Collider>());
-        if (item.GetComponent<Rigidbody>())
+        Rigidbody itemRigidbody = itemHolded.GetComponent<Rigidbody>();
+        if (itemRigidbody)
         {
-            item.GetComponent<Rigidbody>().isKinematic = true;
+            itemRigidbody.isKinematic = true;
+            itemRigidbody.interpolation = RigidbodyInterpolation.None;
         }
         var itemCollider = item.GetComponent<Collider>();
         itemCollider.enabled = false;
