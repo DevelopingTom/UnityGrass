@@ -83,15 +83,15 @@ public class CarController : WheelVehicleBehaviour
         
         override protected void Movement() 
         {
-            if (isEntered) // Check if the car is entered
+            if (wheelsAreGrounded[2] + wheelsAreGrounded[3] > 0) 
             {
-                if (wheelsAreGrounded[2] + wheelsAreGrounded[3] > 0) 
+                for (int i = 0; i < rayPoints.Length; i++)
                 {
-                    for (int i = 0; i < rayPoints.Length; i++)
+                    if (isEntered) // Check if the car is entered
                     {
                         Acceleration(rayPoints[i]);
-                        InverseDrag(rayPoints[i].forward, rayPoints[i], 1f);
                     }            
+                    InverseDrag(rayPoints[i].forward, rayPoints[i], 1f);
                 } 
             }
             base.Movement();
