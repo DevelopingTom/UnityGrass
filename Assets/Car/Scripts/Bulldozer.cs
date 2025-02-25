@@ -24,6 +24,9 @@ public class Bulldozer : MonoBehaviour
         {
             dustParticleSystems.Play();
             GetPlayerInput();
+        } else if (dustParticleSystems.isPlaying)
+        {
+            dustParticleSystems.Stop();
         }
     }
 
