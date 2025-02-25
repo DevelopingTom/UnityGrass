@@ -15,7 +15,7 @@ public class Bulldozer : MonoBehaviour
     {
         dustParticleSystems.Stop();
     }
-    
+
     private void Update()
     {
         Enterable enterable = GetComponent<Enterable>();
@@ -66,6 +66,6 @@ public class Bulldozer : MonoBehaviour
     private void MoveLaddle(Vector3 direction)
     {
         float step = moveSpeed * Time.deltaTime;
-        laddle.transform.RotateAround(pivotPoint.position, Vector3.right, direction == Vector3.up ? -step : step);
+        laddle.transform.RotateAround(pivotPoint.position, transform.right, direction == Vector3.up ? -step : step);
     }
 }
