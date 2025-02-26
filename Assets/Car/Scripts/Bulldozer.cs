@@ -7,8 +7,8 @@ public class Bulldozer : MonoBehaviour
     
     [SerializeField] private GameObject laddle; // The GameObject to be moved
     [SerializeField] private Transform pivotPoint; // The pivot point around which the laddle will rotate
-    [SerializeField] private float maxRotation = 25f; // Maximum rotation angle in degrees
-    [SerializeField] private float minRotation = -25f; // Minimum rotation angle in degrees
+    [SerializeField] private float maxRotation = 15f; // Maximum rotation angle in degrees
+    [SerializeField] private float minRotation = -80f; // Minimum rotation angle in degrees
     [SerializeField] private float moveSpeed = 20f; // Speed of the movement
 
     private void Start()
