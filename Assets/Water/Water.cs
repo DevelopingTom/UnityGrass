@@ -4,14 +4,12 @@ public class Water : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Enter water");
         if (other.CompareTag("Boat"))
         {
-            Debug.Log("Boat entered water");
             BoatController boat = other.GetComponent<BoatController>();
             if (boat != null)
             {
-                boat.SetInWater(true);
+                boat.SetWater(this.gameObject);
             }
         }
     }
@@ -23,7 +21,7 @@ public class Water : MonoBehaviour
             BoatController boat = other.GetComponent<BoatController>();
             if (boat != null)
             {
-                boat.SetInWater(false);
+                boat.SetWater(null);
             }
         }
     }

@@ -3,55 +3,118 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BoatController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float turnSpeed = 5f;
-    [SerializeField] private float buoyancyForce = 10f;
-    [SerializeField] private Transform[] buoyancyPoints;
+    public Transform[] Floaters;
+    public float UnderWaterDrag = 3f;
+    public float UnderWaterAngularDrag = 1f;
+    public float AirDrag = 0f;
+    public float AirAngularDrag = 0.05f;
+    public float FloatingPower = 15f;
+    public float WaterHeight = 0f;
+    public Vector3 forcePosition;
+    public GameObject water;
+    public float moveSpeed = 10f;
+    public float turnSpeed = 5f;
+    private Rigidbody Rb;
+    private bool Underwater;
+    private int FloatersUnderWater;
+    private float moveInput;
+    private float steerInput;
 
-    private Rigidbody rb;
-    private bool inWater = false;
+    public bool isEntered { get; private set; }
 
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        Rb = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        HandleMovement();
-        if (inWater)
+        
+        Enterable enterable = GetComponent<Enterable>();
+
+        if (enterable != null && enterable.Entered)
         {
-            HandleBuoyancy();
+            GetPlayerInput();
+            isEntered = true;
+        }
+        else
+        {
+            isEntered = false;
         }
     }
-
-    private void HandleMovement()
+    public void SetWater(GameObject water)
     {
-        float moveInput = Input.GetAxis("Vertical");
-        float turnInput = Input.GetAxis("Horizontal");
-
-        Vector3 moveDirection = transform.forward * moveInput * moveSpeed;
-        rb.AddForce(moveDirection, ForceMode.Acceleration);
-
-        float turn = turnInput * turnSpeed;
-        rb.AddTorque(0f, turn, 0f, ForceMode.Acceleration);
+        if (water != null) 
+        {
+            WaterHeight = water.transform.position.y;
+        }
+        else
+        {
+            WaterHeight = 0;
+        }
+        this.water = water;
     }
 
-    private void HandleBuoyancy()
+    // Update is called once per frame
+    void FixedUpdate()
     {
-        foreach (Transform point in buoyancyPoints)
+        FloatersUnderWater = 0;
+        for(int i = 0; i < Floaters.Length; i++)
         {
-            if (point.position.y < 0f)
+            float diff = Floaters[i].position.y - WaterHeight;
+            if (diff < 0)
             {
-                float forceFactor = Mathf.Clamp01(-point.position.y);
-                Vector3 uplift = -Physics.gravity * (forceFactor * buoyancyForce);
-                rb.AddForceAtPosition(uplift, point.position, ForceMode.Acceleration);
+                Rb.AddForceAtPosition(Vector3.up * FloatingPower * Mathf.Abs(diff), Floaters[i].position, ForceMode.Force);
+                FloatersUnderWater += 1;
+                if (!Underwater)
+                {
+                    Underwater = true;
+                    SwitchState(true);
+                }
             }
         }
+        if (Underwater && FloatersUnderWater == 0)
+        {
+            Underwater = false;
+            SwitchState(false);
+        }
+
+        // Handle boat movement
+        HandleMovement();
     }
 
-    public void SetInWater(bool isInWater)
+    void SwitchState(bool isUnderwater)
     {
-        inWater = isInWater;
+        if (isUnderwater)
+        {
+            Rb.linearDamping  = UnderWaterDrag;
+            Rb.angularDamping  = UnderWaterAngularDrag;
+        }
+        else
+        {
+            Rb.linearDamping  = AirDrag;
+            Rb.angularDamping  = AirAngularDrag;
+        }
+    }
+
+    #region Input Handling
+        private void GetPlayerInput()
+        {
+            moveInput = Input.GetAxis("Vertical");
+            steerInput = Input.GetAxis("Horizontal");
+        }
+    #endregion
+    
+    void HandleMovement()
+    {
+        if (isEntered)
+        {
+            Vector3 moveDirection = transform.forward * moveInput * moveSpeed;
+            Rb.AddForce(moveDirection, ForceMode.Acceleration);
+
+            float turn = steerInput * turnSpeed;
+            Rb.AddTorque(0f, turn, 0f, ForceMode.Acceleration);
+        }
     }
 }
