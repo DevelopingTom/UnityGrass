@@ -1,4 +1,5 @@
 using UnityEngine;
+using KinematicCharacterController.Examples;
 
 public class Water : MonoBehaviour
 {
@@ -6,11 +7,15 @@ public class Water : MonoBehaviour
     {
         if (other.CompareTag("Boat"))
         {
-            BoatController boat = other.GetComponent<BoatController>();
+            FloatController boat = other.GetComponent<FloatController>();
             if (boat != null)
             {
                 boat.SetWater(this.gameObject);
             }
+        }
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponentInChildren<ExampleCharacterController>().TransitionToState(CharacterState.Swimming);
         }
     }
 
@@ -18,11 +23,15 @@ public class Water : MonoBehaviour
     {
         if (other.CompareTag("Boat"))
         {
-            BoatController boat = other.GetComponent<BoatController>();
+            FloatController boat = other.GetComponent<FloatController>();
             if (boat != null)
             {
                 boat.SetWater(null);
             }
+        }
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponentInChildren<ExampleCharacterController>().TransitionToState(CharacterState.Jumping);
         }
     }
 }

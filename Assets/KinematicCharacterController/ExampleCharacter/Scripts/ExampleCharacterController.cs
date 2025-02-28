@@ -11,7 +11,8 @@ namespace KinematicCharacterController.Examples
         Default,
         Jumping,
         Running,
-        Sitting
+        Sitting,
+        Swimming
     }
 
     public enum OrientationMethod
