@@ -22,6 +22,8 @@ public class SplineRectangleExtruder : MonoBehaviour
 
     [SerializeField]
     private int resolution = 10;
+    [SerializeField]
+    private float bezel = 0;
 
     [SerializeField]
     private float m_curveStep = 0.2f;
@@ -255,12 +257,12 @@ public class SplineRectangleExtruder : MonoBehaviour
                 int vertoffset = splineOffset + currentSplinePoint;
                 Vector3 p1 = m_vertsP1[vertoffset - 1];
                 Vector3 p2 = m_vertsP2[vertoffset - 1];
-                Vector3 p3 = new Vector3(p2.x, p2.y + m_height, p2.z);
-                Vector3 p4 = new Vector3(p1.x, p1.y + m_height, p1.z);
+                Vector3 p3 = new Vector3(p2.x + bezel, p2.y + m_height, p2.z);
+                Vector3 p4 = new Vector3(p1.x - bezel, p1.y + m_height, p1.z);
                 Vector3 p7 = m_vertsP2[vertoffset];
                 Vector3 p8 = m_vertsP1[vertoffset];
-                Vector3 p5 = new Vector3(p8.x, p8.y + m_height, p8.z);
-                Vector3 p6 = new Vector3(p7.x, p7.y + m_height, p7.z);
+                Vector3 p5 = new Vector3(p8.x - bezel, p8.y + m_height, p8.z);
+                Vector3 p6 = new Vector3(p7.x + bezel, p7.y + m_height, p7.z);
                 
                 offset = 8 * resolution * currentSplineIndex;
                 offset += 8 * (currentSplinePoint - 1);
