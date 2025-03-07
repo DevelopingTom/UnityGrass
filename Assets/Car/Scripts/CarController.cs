@@ -18,14 +18,30 @@ public class CarController : WheelVehicleBehaviour
     [SerializeField] private AnimationCurve powerCurve;
     [SerializeField] private float jumpForce = 800f;
 
+    [Header("Fuel Settings")]
+    public GameObject fuelBar;
+    [SerializeField] private float fuel = 1f;
+    [SerializeField] private float fuelCapacity = 1f;
+    [SerializeField] private float fuelConsumptionRate = 0.01f;
+
     [Header("Input")]
     private float moveInput = 0;
     private float steerInput = 0;
-    private bool isEntered = false; 
+    private bool isEntered = false;
+
+    override public void Start()
+    {
+        base.Start();
+        if (fuelBar != null)
+        {
+            fuelCapacity = fuelBar.GetComponent<Renderer>().material.GetFloat("_Level");
+            fuel = fuelCapacity;
+        }
+    }
 
     private void Update()
     {
-        
+
         Enterable enterable = GetComponent<Enterable>();
 
         if (enterable != null && enterable.Entered)
@@ -37,10 +53,11 @@ public class CarController : WheelVehicleBehaviour
         {
             isEntered = false;
         }
-    }
 
-    override public void Start() {
-        base.Start();
+        if (fuelBar != null && isEntered && fuel > -fuelCapacity && moveInput > 0)
+        {
+            ConsumeFuel();
+        }
     }
 
     private void LightToggle()
@@ -100,6 +117,7 @@ public class CarController : WheelVehicleBehaviour
         }
         private void Acceleration(Transform tireTransform)
         {
+            if (fuel <= -fuelCapacity) return; // Stop acceleration if out of fuel
             float carSpeed = Vector3.Dot(transform.forward, carRBody.linearVelocity);
             float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / maxSpeed);
             float availableTorque = powerCurve.Evaluate(normalizedSpeed) * moveInput * carRBody.mass * 5;
@@ -120,5 +138,12 @@ public class CarController : WheelVehicleBehaviour
 
         
     #endregion
+
+    private void ConsumeFuel()
+    {
+        fuel -= fuelConsumptionRate * Time.deltaTime;
+        fuel = Math.Max(-fuelCapacity, fuel);
+        fuelBar.GetComponent<Renderer>().material.SetFloat("_Level", fuel);
+    }
 
 }
