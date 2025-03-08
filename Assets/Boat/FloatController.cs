@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -20,6 +21,10 @@ public class FloatController : MonoBehaviour
     protected void Start()
     {
         Rb = GetComponent<Rigidbody>();
+        if (Floaters.Length == 0)
+        {
+            Floaters.Append(transform);
+        }
     }
 
     public void SetWater(GameObject water)
@@ -44,11 +49,8 @@ public class FloatController : MonoBehaviour
         for(int i = 0; i < Floaters.Length; i++)
         {
             float diff = Floaters[i].position.y - (Waves != null ? Waves.GetHeight(Floaters[i].position): 0);
-            Debug.Log(Waves != null ? Waves.GetHeight(Floaters[i].position): 0);
-            Debug.Log(WaterHeight);
             if (diff < 0)
             {
-                Debug.Log(Vector3.up * FloatingPower * Mathf.Abs(diff));
                 Rb.AddForceAtPosition(Vector3.up * FloatingPower * Mathf.Abs(diff), Floaters[i].position, ForceMode.Force);
                 FloatersUnderWater += 1;
                 if (!Underwater)
@@ -62,6 +64,11 @@ public class FloatController : MonoBehaviour
         {
             Underwater = false;
             SwitchState(false);
+        }
+        else if (!Underwater && FloatersUnderWater > 0)
+        {
+            Underwater = true;
+            SwitchState(true);
         }
     }
 

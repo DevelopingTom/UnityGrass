@@ -33,7 +33,7 @@ Material:
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties: _WobbleZ
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -110,10 +110,12 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
+    - _Float: 1
+    - _FoamThickness: -0.015
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Level: 0.2
+    - _Level: 0.15
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -126,18 +128,19 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _WobbleX: 0.02
+    - _WobbleX: 0
     - _WobbleY: 0.04
-    - _WobbleZ: 0.03
+    - _WobbleZ: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BackColor: {r: 0.3570024, g: 0.93207544, b: 0.93207544, a: 1}
+    - _BackColor: {r: 0.11475258, g: 0.85660374, b: 0.12272947, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FresnelColor: {r: 0.34528294, g: 1, b: 0.92789453, a: 1}
-    - _FrontColor: {r: 0.09393368, g: 0.6301887, b: 0.6200227, a: 1}
+    - _FrontColor: {r: 0.09006457, g: 0.081131995, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _SurfaceColor: {r: 0.2471698, g: 1, b: 0.56749, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
