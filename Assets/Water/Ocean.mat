@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Water
+  m_Name: Ocean
   m_Shader: {fileID: -6465566751694194690, guid: 9ba11f9c91feb3842a1b153dfb372499, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -92,17 +92,16 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _Deepness: 4.76
-    - _Depth: 2.96
+    - _Deepness: 3.43
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FoamAmount: 1.26
-    - _FoamCutoff: 2.07
-    - _FoamDensity: 100
-    - _FoamSpeed: 5.87
+    - _FoamAmount: 1.14
+    - _FoamCutoff: 1.58
+    - _FoamDensity: 5.12
+    - _FoamSpeed: 1.72
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -112,9 +111,9 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RippleDensity: 25.47
-    - _RippleSlimness: 9
-    - _RippleSpeed: 6.4
+    - _RippleDensity: 3.5
+    - _RippleSlimness: 1.8
+    - _RippleSpeed: 4
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -122,21 +121,21 @@ Material:
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _Transparency: 1
-    - _WaveSpeed: 0
+    - _WaveSpeed: 0.05
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.10588236, g: 0.65234214, b: 0.99215686, a: 1}
+    - _BaseColor: {r: 0.105882354, g: 0.6509804, b: 0.99215686, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0, g: 0.49606514, b: 1, a: 1}
+    - _DeepColor: {r: 0, g: 0.49411762, b: 1, a: 0.85882354}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FoamColor: {r: 3.9999998, g: 3.9999998, b: 3.9999998, a: 1}
-    - _RippleColor: {r: 0.22941178, g: 0.5, b: 0.4381843, a: 0}
-    - _ShallowColor: {r: 0, g: 0.96470594, b: 1, a: 0}
+    - _FoamColor: {r: 1.9766746, g: 1.9766746, b: 1.9766746, a: 1}
+    - _RippleColor: {r: 0.30655926, g: 0.50432336, b: 0.7830189, a: 0}
+    - _ShallowColor: {r: 0.06274495, g: 0.9236072, b: 1, a: 0.49803922}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &3071909764861743859
+--- !u!114 &6773840626854191345
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
