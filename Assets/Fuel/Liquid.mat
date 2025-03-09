@@ -100,6 +100,8 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
+    - _BlobDensity: 2.45
+    - _BlobSpeed: 4.83
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -115,7 +117,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Level: 0.15
+    - _Level: 0.24
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -134,13 +136,14 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BackColor: {r: 0.11475258, g: 0.85660374, b: 0.12272947, a: 1}
+    - _BackColor: {r: 0.05098039, g: 1, b: 0.8884381, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BlobColor: {r: 0, g: 5.723607, b: 5.723607, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FresnelColor: {r: 0.34528294, g: 1, b: 0.92789453, a: 1}
+    - _FresnelColor: {r: 2.2174883, g: 6.422235, b: 5.959157, a: 1}
     - _FrontColor: {r: 0.09006457, g: 0.081131995, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SurfaceColor: {r: 0.2471698, g: 1, b: 0.56749, a: 1}
+    - _SurfaceColor: {r: 0, g: 7.3840265, b: 7.4642644, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
