@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 using KinematicCharacterController.Examples;
 using System;
@@ -13,6 +14,9 @@ public class Enterable : MonoBehaviour
     public float enterDuration = 1.0f; // Duration for entering the vehicle
     private bool isPlayerInTrigger = false;
     private Boolean _isIn = false;
+    public UnityEvent enterEvent;
+    public UnityEvent exitEvent;
+
     public Boolean Entered
     {
         get => _isIn;
@@ -61,6 +65,7 @@ public class Enterable : MonoBehaviour
             mesh.parent = seatPosition;
         }
         player.SetActive(false);
+        enterEvent.Invoke();
     }
 
     void Exit()
@@ -78,6 +83,7 @@ public class Enterable : MonoBehaviour
             player.GetComponentInChildren<ExampleCharacterController>().TransitionToState(CharacterState.Jumping);
             player = null;
             Entered = false;
+            exitEvent.Invoke();
         }
     }
     

@@ -1,9 +1,9 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BoatController : FloatController
 {   
-    [SerializeField] protected ParticleSystem dustParticleSystems;
     private float moveInput;
     private float steerInput;
     public float moveSpeed = 10f;
@@ -13,23 +13,19 @@ public class BoatController : FloatController
     protected new void Start()
     {
         base.Start();
-        dustParticleSystems.Stop();
     }
     
     private void Update()
     {
-
         Enterable enterable = GetComponent<Enterable>();
 
         if (enterable != null && enterable.Entered)
         {
-            dustParticleSystems.Play();
             GetPlayerInput();
             isEntered = true;
         }
         else
         {
-            dustParticleSystems.Stop();
             isEntered = false;
         }
     }
