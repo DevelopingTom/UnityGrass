@@ -48,7 +48,7 @@ public class FloatController : MonoBehaviour
         FloatersUnderWater = 0;
         for(int i = 0; i < Floaters.Length; i++)
         {
-            float diff = Floaters[i].position.y - (Waves != null ? Waves.GetHeight(Floaters[i].position): 0);
+            float diff = Floaters[i].position.y - (Waves != null ? Waves.GetAltitude(Floaters[i].position): 0);
             if (diff < 0)
             {
                 Rb.AddForceAtPosition(Vector3.up * FloatingPower * Mathf.Abs(diff), Floaters[i].position, ForceMode.Force);

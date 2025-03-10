@@ -15,20 +15,16 @@ namespace KinematicCharacterController.Examples
         Swimming
     }
 
-    public enum OrientationMethod
-    {
-        TowardsCamera,
-        TowardsMovement,
-    }
-
     public struct PlayerCharacterInputs
     {
         public float MoveAxisForward;
         public float MoveAxisRight;
         public Quaternion CameraRotation;
         public bool JumpDown;
+        public bool JumpHeld;
         public bool CrouchDown;
         public bool CrouchUp;
+        public bool CrouchHeld;
     }
 
     public struct AICharacterInputs
@@ -37,12 +33,6 @@ namespace KinematicCharacterController.Examples
         public Vector3 LookVector;
     }
 
-    public enum BonusOrientationMethod
-    {
-        None,
-        TowardsGravity,
-        TowardsGroundSlopeAndGravity,
-    }
 
     public class ExampleCharacterController : MonoBehaviour, ICharacterController
     {
@@ -54,7 +44,6 @@ namespace KinematicCharacterController.Examples
         public float MaxStableMoveSpeed = 10f;
         public float StableMovementSharpness = 15f;
         public float OrientationSharpness = 10f;
-        public OrientationMethod OrientationMethod = OrientationMethod.TowardsCamera;
 
         [Header("Air Movement")]
         public float MaxAirMoveSpeed = 15f;
@@ -68,9 +57,17 @@ namespace KinematicCharacterController.Examples
         public float JumpPreGroundingGraceTime = 0f;
         public float JumpPostGroundingGraceTime = 0f;
 
+        [Header("Swimming")]
+        public Transform SwimmingReferencePoint;
+        public LayerMask WaterLayer;
+        public Waves Waves;
+        public float SwimmingSpeed = 4f;
+        public float WaterUpSpeed = 2f;
+        public float SwimmingMovementSharpness = 3;
+        public float SwimmingOrientationSharpness = 2f;
+
         [Header("Misc")]
         public List<Collider> IgnoredColliders = new List<Collider>();
-        public BonusOrientationMethod BonusOrientationMethod = BonusOrientationMethod.None;
         public float BonusOrientationSharpness = 10f;
         public Vector3 Gravity = new Vector3(0, -30f, 0);
         public Transform MeshRoot;
@@ -83,6 +80,8 @@ namespace KinematicCharacterController.Examples
         private RaycastHit[] _probedHits = new RaycastHit[8];
         private Vector3 _moveInputVector;
         private Vector3 _lookInputVector;
+        private bool _jumpInputIsHeld = false;
+        private bool _crouchInputIsHeld = false;
         private bool _jumpRequested = false;
         private bool _jumpConsumed = false;
         private bool _jumpedThisFrame = false;
@@ -91,6 +90,7 @@ namespace KinematicCharacterController.Examples
         private Vector3 _internalVelocityAdd = Vector3.zero;
         private bool _shouldBeCrouching = false;
         private bool _isCrouching = false;
+        private Collider _waterZone;
 
         private Vector3 lastInnerNormal = Vector3.zero;
         private Vector3 lastOuterNormal = Vector3.zero;
@@ -126,6 +126,7 @@ namespace KinematicCharacterController.Examples
             {
                 case CharacterState.Default:
                     {
+                        Motor.SetGroundSolvingActivation(true);
                         break;
                     }
                 case CharacterState.Jumping:
@@ -143,6 +144,11 @@ namespace KinematicCharacterController.Examples
                         Motor.SetMovementCollisionsSolvingActivation(false);
                         Motor.SetGroundSolvingActivation(false);
                         animator.SetBool("Sitting", true);
+                        break;
+                    }
+                case CharacterState.Swimming:
+                    {
+                        Motor.SetGroundSolvingActivation(false);
                         break;
                     }
             }
@@ -184,6 +190,8 @@ namespace KinematicCharacterController.Examples
         /// </summary>
         public void SetInputs(ref PlayerCharacterInputs inputs)
         {
+            _jumpInputIsHeld = inputs.JumpHeld;
+            _crouchInputIsHeld = inputs.CrouchHeld;
             // Clamp input
             Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(inputs.MoveAxisRight, 0f, inputs.MoveAxisForward), 1f);
 
@@ -197,15 +205,7 @@ namespace KinematicCharacterController.Examples
             // Move and look inputs
             _moveInputVector = cameraPlanarRotation * moveInputVector;
 
-            switch (OrientationMethod)
-            {
-                case OrientationMethod.TowardsCamera:
-                    _lookInputVector = cameraPlanarDirection;
-                    break;
-                case OrientationMethod.TowardsMovement:
-                    _lookInputVector = _moveInputVector.normalized;
-                    break;
-            }
+            _lookInputVector = _moveInputVector.normalized;
 
             // Jumping input
             if (inputs.JumpDown)
@@ -242,6 +242,11 @@ namespace KinematicCharacterController.Examples
                 {
                     break;
                 }
+                case CharacterState.Swimming:
+                    {
+                        _jumpRequested = inputs.JumpHeld;
+                        break;
+                    }
             }
         }
 
@@ -262,6 +267,32 @@ namespace KinematicCharacterController.Examples
         /// </summary>
         public void BeforeCharacterUpdate(float deltaTime)
         {
+            // Handle detecting water surfaces
+            {
+                // Do a character overlap test to detect water surfaces
+                if (Motor.CharacterOverlap(Motor.TransientPosition, Motor.TransientRotation, _probedColliders, WaterLayer, QueryTriggerInteraction.Collide) > 0)
+                {
+                    // If a water surface was detected
+                    if (_probedColliders[0] != null)
+                    {
+                        // If the swimming reference point is inside the box, make sure we are in swimming state
+                        if (Physics.ClosestPoint(SwimmingReferencePoint.position, _probedColliders[0], _probedColliders[0].transform.position, _probedColliders[0].transform.rotation) == SwimmingReferencePoint.position)
+                        {
+                            TransitionToState(CharacterState.Swimming);
+                            _waterZone = _probedColliders[0];
+                            Waves = _waterZone.GetComponent<Waves>();
+                        }
+                        // otherwise; default state
+                        else
+                        {
+                            if (CurrentCharacterState == CharacterState.Swimming)
+                            {
+                                TransitionToState(CharacterState.Default);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -275,6 +306,7 @@ namespace KinematicCharacterController.Examples
             {
                 case CharacterState.Running:
                 case CharacterState.Jumping:
+                case CharacterState.Swimming:
                 case CharacterState.Default:
                     {
                         if (_lookInputVector.sqrMagnitude > 0f && OrientationSharpness > 0f)
@@ -286,38 +318,11 @@ namespace KinematicCharacterController.Examples
                             currentRotation = Quaternion.LookRotation(smoothedLookInputDirection, Motor.CharacterUp);
                         }
 
-                        Vector3 currentUp = (currentRotation * Vector3.up);
-                        if (BonusOrientationMethod == BonusOrientationMethod.TowardsGravity)
-                        {
-                            // Rotate from current up to invert gravity
-                            Vector3 smoothedGravityDir = Vector3.Slerp(currentUp, -Gravity.normalized, 1 - Mathf.Exp(-BonusOrientationSharpness * deltaTime));
-                            currentRotation = Quaternion.FromToRotation(currentUp, smoothedGravityDir) * currentRotation;
-                        }
-                        else if (BonusOrientationMethod == BonusOrientationMethod.TowardsGroundSlopeAndGravity)
-                        {
-                            if (Motor.GroundingStatus.IsStableOnGround)
-                            {
-                                Vector3 initialCharacterBottomHemiCenter = Motor.TransientPosition + (currentUp * Motor.Capsule.radius);
-
-                                Vector3 smoothedGroundNormal = Vector3.Slerp(Motor.CharacterUp, Motor.GroundingStatus.GroundNormal, 1 - Mathf.Exp(-BonusOrientationSharpness * deltaTime));
-                                currentRotation = Quaternion.FromToRotation(currentUp, smoothedGroundNormal) * currentRotation;
-
-                                // Move the position to create a rotation around the bottom hemi center instead of around the pivot
-                                Motor.SetTransientPosition(initialCharacterBottomHemiCenter + (currentRotation * Vector3.down * Motor.Capsule.radius));
-                            }
-                            else
-                            {
-                                Vector3 smoothedGravityDir = Vector3.Slerp(currentUp, -Gravity.normalized, 1 - Mathf.Exp(-BonusOrientationSharpness * deltaTime));
-                                currentRotation = Quaternion.FromToRotation(currentUp, smoothedGravityDir) * currentRotation;
-                            }
-                        }
-                        else
-                        {
-                            Vector3 smoothedGravityDir = Vector3.Slerp(currentUp, Vector3.up, 1 - Mathf.Exp(-BonusOrientationSharpness * deltaTime));
-                            currentRotation = Quaternion.FromToRotation(currentUp, smoothedGravityDir) * currentRotation;
-                        }
-                        break;
+                        Vector3 currentUp = currentRotation * Vector3.up;
+                        Vector3 smoothedGravityDir = Vector3.Slerp(currentUp, Vector3.up, 1 - Mathf.Exp(-BonusOrientationSharpness * deltaTime));
+                        currentRotation = Quaternion.FromToRotation(currentUp, smoothedGravityDir) * currentRotation;
                     }
+                    break;
             }
         }
 
@@ -405,7 +410,7 @@ namespace KinematicCharacterController.Examples
                         currentVelocity += Gravity * deltaTime;
 
                         // Drag
-                        currentVelocity *= (1f / (1f + (Drag * deltaTime)));
+                        currentVelocity *= 1f / (1f + (Drag * deltaTime));
                     }
                     // Handle jumping
                     _timeSinceJumpRequested += deltaTime;
@@ -436,8 +441,32 @@ namespace KinematicCharacterController.Examples
                         }
                     }                        
                     break;
-            }
+                case CharacterState.Swimming:
+                    {
+                        // Calculate target velocity
+                        Vector3 inputRight = Vector3.Cross(_moveInputVector, Motor.CharacterUp);
+                        Vector3 reorientedInput = Vector3.Cross(Vector3.up, inputRight).normalized * _moveInputVector.magnitude;
+                        Vector3 targetMovementVelocity = reorientedInput * SwimmingSpeed;
 
+                        // Smooth movement Velocity
+                        Vector3 smoothedVelocity = Vector3.Lerp(currentVelocity, targetMovementVelocity, 1 - Mathf.Exp(-SwimmingMovementSharpness * deltaTime));
+                        
+                        // Stick to the waves surface
+                        Vector3 resultingSwimmingReferencePosition = Motor.TransientPosition + (smoothedVelocity * deltaTime);
+                        float waveAltitude = Waves.GetAltitude(resultingSwimmingReferencePosition);
+
+                        smoothedVelocity += Motor.CharacterUp * WaterUpSpeed * (waveAltitude - SwimmingReferencePoint.position.y) * deltaTime;
+                        
+                        // Jump out of water
+                        if (_jumpRequested)
+                        {
+                            smoothedVelocity += (Motor.CharacterUp * JumpUpSpeed) - Vector3.Project(currentVelocity, Motor.CharacterUp);
+                        }
+
+                        currentVelocity = smoothedVelocity;
+                        break;
+                    }
+            }
         }
 
         /// <summary>

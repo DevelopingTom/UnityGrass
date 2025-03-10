@@ -13,10 +13,6 @@ public class Water : MonoBehaviour
                 boat.SetWater(this.gameObject);
             }
         }
-        if (other.CompareTag("Player"))
-        {
-            other.GetComponentInChildren<ExampleCharacterController>().TransitionToState(CharacterState.Swimming);
-        }
     }
 
     private void OnTriggerExit(Collider other)

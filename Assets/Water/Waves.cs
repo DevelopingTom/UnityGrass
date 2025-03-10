@@ -72,8 +72,12 @@ public class Waves : MonoBehaviour
                    + Mesh.vertices[index(p4.x, p4.z)].y * (max - Vector3.Distance(p4, localPos));
 
         //scale
-        return Height / 2 + 1 + height * transform.lossyScale.y / dist;
+        return height * transform.lossyScale.y / dist;
+    }
 
+    public float GetAltitude(Vector3 position)
+    {
+        return transform.position.y + GetHeight(position);
     }
 
     private Vector3[] GenerateVerts()
@@ -81,8 +85,8 @@ public class Waves : MonoBehaviour
         var verts = new Vector3[(Dimension + 1) * (Dimension + 1)];
 
         //equaly distributed verts
-        for(int x = 0; x <= Dimension; x++)
-            for(int z = 0; z <= Dimension; z++)
+        for (int x = 0; x <= Dimension; x++)
+            for (int z = 0; z <= Dimension; z++)
                 verts[index(x, z)] = new Vector3(x, -Height / 2, z);
 
         return verts;
