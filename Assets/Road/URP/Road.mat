@@ -72,7 +72,7 @@ Material:
     m_Colors:
     - _Centre_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Edge_Color: {r: 1, g: 0.6745098, b: 0, a: 0}
-    - _Road_Color: {r: 0.2830189, g: 0.2235699, b: 0.18289427, a: 0}
+    - _Road_Color: {r: 0.4433962, g: 0.43712175, b: 0.43293875, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5351176024853079146

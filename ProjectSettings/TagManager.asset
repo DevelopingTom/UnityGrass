@@ -17,7 +17,7 @@ TagManager:
   - UI
   - Drivable
   - Bulldozer
-  - 
+  - Ripple
   - 
   - 
   - 
@@ -48,7 +48,7 @@ TagManager:
   m_RenderingLayers:
   - Default
   - Train decals
-  - Light Layer 2
+  - 'Ripple '
   - Light Layer 3
   - Light Layer 4
   - Light Layer 5
